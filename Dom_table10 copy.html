@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dom_table10</title>
+    <style>
+      table{float:left; margin:0 1rem; border:10px outset rgba(0, 26, 255, 0.705); 
+     
+      }
+      .cf:after{display:block; content:""; clear:both;
+      }
+    </style>
 </head>
 <body>
-    <section id="section10">
-        <h1>Ex10-클릭한 컬럼을 기준으로 레코드 정렬하기 #2</h1>  
+    <section id="section10" class="cf">
+        <h1>Ex10-클릭한 컬럼을 기준으로 레코드 정렬하기 #3</h1>  
         <template>
             <tr>
                     <td></td>
@@ -17,6 +24,7 @@
                     <td></td>
             </tr>
         </template>
+     
         <table border="1" class="table-list">
             <thead>
                 <tr>
@@ -58,7 +66,22 @@
                 </tr> -->
             </tbody>
         </table>
+        
+        <div id="change-btn">
+            <input type="color" class="color-box"/> 
+            <input type="button" class="color-btn" value="보더 바꾸기" /> 
+        <br/> <br/>
+            <select class="table-bgcolor">
+                <option value="rgba(255, 55, 85, 0.5)">red 계열</option>
+                <option value="rgba(0, 25, 235, 0.2)">blue 계열</option>
+                <option value="rgba(0, 255, 225, 0.3)">yellow 계열</option>
+                <option value="rgba(255, 255, 255, 1)">화이트계열</option>
+                <option value="rgba(0, 0, 0, 0.5)">블랙계열</option>
+            </select> 
+            <input type="button" class="bgcolor-btn" value="배경 색상 바꾸기" /> 
+        </div> 
     </section>
+    <br/>
     <hr />     
 
 <script>
@@ -72,12 +95,32 @@ const notices = [
     {"No":123, "Title":"자바스크립트 변수 let...", "Link":"https://pafa.tistory.com/123?category=476828", "Subject":"자바스크립트", "Level":"상급"}
 ];
 
-
 const section = document.querySelector("#section10");
 
 const tableList =section.querySelector(".table-list");
 const titldTd = section.querySelector(".title");
 const tbodyNode = tableList.querySelector("tbody");
+
+const changeBtn =section.querySelector("#change-btn");
+const colorBox =changeBtn.querySelector(".color-box");
+const colorBtn =changeBtn.querySelector(".color-btn");
+
+colorBtn.addEventListener('click', function(){
+               
+    tableList.style.borderColor = colorBox.value;
+
+});
+
+const tableBgcolor =changeBtn.querySelector(".table-bgcolor");
+const bgcolorBtn = changeBtn.querySelector(".bgcolor-btn");
+
+bgcolorBtn.addEventListener('click', function(){
+               
+               tableList.style.backgroundColor = tableBgcolor.value;
+           
+           });
+
+
 
 const bindData = function(){
     const template = section.querySelector("template");
