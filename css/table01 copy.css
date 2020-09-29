@@ -1,0 +1,29 @@
+*{margin:0; padding:0;}
+#section1{padding:3%;}
+h1{display:inline-block;
+    border-bottom:1px solid #000;}
+#calculator{
+    display:inline-block;
+    margin:3%;   
+    border:3px dotted red;
+    padding:1%; 
+}    
+#calculator>input{
+    height:50px;
+    text-align:center;
+    font-size:1rem;
+    font-weight:bold;
+}
+#calculator>select{
+    height:50px;
+    width:70px;
+    border-radius:50%;
+    font-weight:bold;
+}
+#calculator>#sum{
+    width:50px;
+    border-radius:30%;
+    font-size:30px;
+    height:50px;
+    vertical-align:top;
+}

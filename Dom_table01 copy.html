@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+   <link rel="stylesheet" href="css/table01 copy.css" />
+</head>
+<body>
+    
+  <section id="section1">
+    <h1>자바스크립트로 계산기 만들기</h1>
+    <br/>
+    
+    <article id="calculator" >
+       <input id="num1" type="text" value="0" />
+       <select>
+           <option value="plus">더하기 </option>
+           <option value="minus"> &nbsp; 빼기 </option>
+           <option value="multi">곱하기 </option>
+           <option value="sub">나누기 </option>           
+       </select>
+       <input id="num2" type="text" value="0" />
+       <input id="sum" type="button" value="=" />
+       <input id="result" type="text" value="0" readonly />
+    </article>   
+  </section>
+
+ <script>
+   const section1 = document.querySelector("#section1");
+   const calculator = section1.querySelector("#calculator");
+   const num1 = calculator.querySelector("#num1");
+   const num2 = calculator.querySelector("#num2"); 
+   const sum = calculator.querySelector("#sum"); 
+   const result = calculator.querySelector("#result");
+   const select = calculator.querySelector("select");
+   const options = select.querySelectorAll("option");
+  
+
+   sum.addEventListener('click', calcu );
+
+   function calcu(){ 
+
+       if(options[0].selected){  
+        result.value = +(num1.value) + +(num2.value);
+        }  else if(options[1].selected){  
+        result.value = +(num1.value) - +(num2.value);
+        } else if(options[2].selected){  
+        result.value = +(num1.value) * +(num2.value);
+        } else if(options[3].selected){  
+        result.value = +(num1.value) / +(num2.value);
+        }
+    
+          };
+
+ </script>
+
+</body>
+</html>
