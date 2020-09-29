@@ -80,12 +80,63 @@
             </select> 
             <input type="button" class="bgcolor-btn" value="배경 색상 바꾸기" /> 
         </div> 
-    </section>
     <br/>
-    <hr />     
+    </section>
+    <hr />    
+    <section id="section6">
+       <h2>Ex6-노드조작: 메뉴추가(createTextNode, Element)</h1>
+        <div id="node6">
+            <input class="title-input" name="title" />
+            <input type="button" class="add-button" value="추가" />
+            <input type="button" class="del-button" value="삭제" />
+        </div>
+        <ul class="menu-list">
+            <li><a href="">aaa</a></li>
+            <li><a href="">bbb</a></li>
+        </ul>
+    </section>
+  
+    
 
 <script>
         //Ex10-클릭한 컬럼을 기준으로 레코드 정렬하기 #1
+
+        const section6 = document.querySelector("#section6");
+        const node6 = section6.querySelector("#node6"); 
+        const titleInput = node6.querySelector(".title-input");
+        const addBtn = node6.querySelector(".add-button");
+        const delBtn = node6.querySelector(".del-button");
+        const menuList = section6.querySelector(".menu-list"); 
+
+          addBtn.addEventListener('click', function(){
+         
+        //  const aNode = document.createElement('a'); 
+        //  aNode.href="";
+        //  aNode.textContent = titleInput.value; 
+        //  const liNode  = document.createElement("li"); 
+        //  liNode.append(aNode);
+        //  menuList.append(liNode);
+        //  titleInput.value = "";
+                    
+        menuList.innerHTML += `<li><a href="">${titleInput.value}</a></li>`; 
+        // 이 방법이 심플하지만 단순히 추가가 아니라 새로 객체를 생성해지는 복잡한 구조이다      
+         // 이럴 땐 아래 방법을 사용하자
+        //   let html = `<a href="">${titleInput.value}</a>`;
+        //   let liNode = document.createElement("li");
+        //   liNode.innerHTML = html;  
+
+        //   menuList.append(liNode);
+
+        });    
+
+        delBtn.addEventListener('click', function(){
+            
+           menuList.children[0].remove();
+           titleInput.value = "";
+        
+        }); 
+
+           
 
 const notices = [
     {"No":114, "Title":"비주얼 스튜디오 코드 설치", "Link":"https://pafa.tistory.com/114?category=476827", "Subject":"자바스크립트", "Level":"중급"},
@@ -174,10 +225,6 @@ titldTd.onclick = function(){
     
     };
 
-
-
     </script>
-
-
 </body>
 </html>
