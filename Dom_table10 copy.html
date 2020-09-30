@@ -68,9 +68,13 @@
         </table>
         
         <div id="change-btn">
+            <input type="button" class="template-btn" value="템플릿감추기" /> 
+        <br/>
+            <input type="button" class="template-show" value="템플릿보이기" /> 
+        <br/>      
             <input type="color" class="color-box"/> 
             <input type="button" class="color-btn" value="보더 바꾸기" /> 
-        <br/> <br/>
+        <br/> 
             <select class="table-bgcolor">
                 <option value="rgba(255, 55, 85, 0.5)">red 계열</option>
                 <option value="rgba(0, 25, 235, 0.2)">blue 계열</option>
@@ -79,6 +83,12 @@
                 <option value="rgba(0, 0, 0, 0.5)">블랙계열</option>
             </select> 
             <input type="button" class="bgcolor-btn" value="배경 색상 바꾸기" /> 
+            <br/>
+            <input type="text" class="tr-add" placeholder="복제할 라인 숫자" /> 
+            <input type="button" class="tr-add-btn" value="복제추가하기" /> 
+            <br/>
+            <input type="text" class="tr-del" placeholder="삭제할 라인 숫자" /> 
+            <input type="button" class="tr-del-btn" value="라인삭제하기" /> 
         </div> 
     <br/>
     </section>
@@ -100,8 +110,151 @@
 
 <script>
         //Ex10-클릭한 컬럼을 기준으로 레코드 정렬하기 #1
+            
 
-        const section6 = document.querySelector("#section6");
+const notices = [
+    {"No":1, "Title":"비주얼 스튜디오 코드 설치", "Link":"https://pafa.tistory.com/114?category=476827", "Subject":"자바스크립트", "Level":"중급"},
+    {"No":2, "Title":"함수 기본 원리", "Link":"https://pafa.tistory.com/105?category=476827", "Subject":"자바스크립트", "Level":"초급"},
+    {"No":3, "Title":"자바스크립트 계산기", "Link":"https://pafa.tistory.com/107?category=476827", "Subject":"자바스크립트", "Level":"중급"},
+    {"No":4, "Title":"DOM 제어대상 찾기", "Link":"https://pafa.tistory.com/108?category=476827", "Subject":"자바스크립트", "Level":"초급"},
+    {"No":5, "Title":"자바스크립트 변수 let...", "Link":"https://pafa.tistory.com/123?category=476828", "Subject":"자바스크립트", "Level":"상급"}
+];
+
+const section = document.querySelector("#section10");
+
+const tableList =section.querySelector(".table-list");
+const titldTd = section.querySelector(".title");
+const tbodyNode = tableList.querySelector("tbody");
+
+const changeBtn =section.querySelector("#change-btn");
+const colorBox =changeBtn.querySelector(".color-box");
+const colorBtn =changeBtn.querySelector(".color-btn");
+
+// 보더 바꾸기
+colorBtn.addEventListener('click', function(){
+               
+    tableList.style.borderColor = colorBox.value;
+
+});
+
+const tableBgcolor =changeBtn.querySelector(".table-bgcolor");
+const bgcolorBtn = changeBtn.querySelector(".bgcolor-btn");
+
+// 배경 색상 바꾸기
+bgcolorBtn.addEventListener('click', function(){
+               
+               tableList.style.backgroundColor = tableBgcolor.value;
+           
+           });
+
+          
+// 정렬하기
+const bindData = function(){
+    const template = section.querySelector("template");
+ 
+
+    for(let i=0; i<notices.length; i++){
+        // var cloneNode = document.importNode(template.content, true);
+        const cloneNode = template.content.cloneNode(true);
+        const tds = cloneNode.querySelectorAll("td");
+        tds[0].textContent = notices[i].No;            
+        tds[1].textContent = notices[i].Title;
+        
+        tds[2].innerHTML =`<a href="${notices[i].Link}">바로가기</a>`;
+        // 아래처럼 풀어쓸 수도 있다.
+        // const aNode = tds[2].children[0];
+        // aNode.href=notices[i].Link;
+        // aNode.textContent = "바로가기";
+        
+        tds[3].textContent = notices[i].Subject;
+        tds[4].textContent = notices[i].Level; 
+
+        // tbodyNode.appendChild(cloneNode);
+        tbodyNode.append(cloneNode);
+        let trNode = tbodyNode.querySelectorAll("tr");
+        trNode[0].style.backgroundColor="blue"
+     }
+
+    
+};
+
+bindData();
+
+// 템플릿 감추기
+const templateBtn = changeBtn.querySelector(".template-btn");
+templateBtn.addEventListener('click', function(){
+    tbodyNode.style.visibility="hidden";
+}  );
+
+// 템플릿 보이기
+const templateShow = changeBtn.querySelector(".template-show");
+templateShow.addEventListener('click',  function(){
+    tbodyNode.style.visibility="visible";
+}  );
+
+
+ let titleSorted = false;
+
+titldTd.onclick = function(){
+    
+    tbodyNode.innerHTML = "";
+
+    
+    if(!titleSorted){
+        notices.sort(function(x,y){     
+            titleSorted = true;
+                if(x.title < y.title){
+                    return -1;
+                    } else if(x.title > y.title ){
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+
+                });
+              
+       }else{
+           notices.reverse(); 
+       }
+         bindData();       
+    
+    };
+
+// 테이블 라인 복제 추가하기 
+
+           
+     
+const trAddBtn = changeBtn.querySelector(".tr-add-btn");
+const trNode = tbodyNode.querySelectorAll("tr");
+const trAdd = changeBtn.querySelector(".tr-add");
+
+trAddBtn.addEventListener('click', function(){
+             
+           let s = +(trAdd.value) - 1;
+           const cTr = trNode[s].cloneNode(true);
+           tbodyNode.append(cTr);
+            trAdd.value = "";
+           });
+
+
+
+// 테이블 라인 삭제하기 
+
+const trDelBtn = changeBtn.querySelector(".tr-del-btn");
+const trDel = changeBtn.querySelector(".tr-del");
+
+
+trDelBtn.addEventListener('click', function(){
+           let s = +(trDel.value) - 1;
+           trNode[s].remove();
+           trDel.value = "";
+           });           
+
+         
+
+   // EX-6 노드 조작
+
+    const section6 = document.querySelector("#section6");
         const node6 = section6.querySelector("#node6"); 
         const titleInput = node6.querySelector(".title-input");
         const addBtn = node6.querySelector(".add-button");
@@ -136,94 +289,10 @@
         
         }); 
 
-           
-
-const notices = [
-    {"No":114, "Title":"비주얼 스튜디오 코드 설치", "Link":"https://pafa.tistory.com/114?category=476827", "Subject":"자바스크립트", "Level":"중급"},
-    {"No":105, "Title":"함수 기본 원리", "Link":"https://pafa.tistory.com/105?category=476827", "Subject":"자바스크립트", "Level":"초급"},
-    {"No":107, "Title":"자바스크립트 계산기", "Link":"https://pafa.tistory.com/107?category=476827", "Subject":"자바스크립트", "Level":"중급"},
-    {"No":108, "Title":"DOM 제어대상 찾기", "Link":"https://pafa.tistory.com/108?category=476827", "Subject":"자바스크립트", "Level":"초급"},
-    {"No":123, "Title":"자바스크립트 변수 let...", "Link":"https://pafa.tistory.com/123?category=476828", "Subject":"자바스크립트", "Level":"상급"}
-];
-
-const section = document.querySelector("#section10");
-
-const tableList =section.querySelector(".table-list");
-const titldTd = section.querySelector(".title");
-const tbodyNode = tableList.querySelector("tbody");
-
-const changeBtn =section.querySelector("#change-btn");
-const colorBox =changeBtn.querySelector(".color-box");
-const colorBtn =changeBtn.querySelector(".color-btn");
-
-colorBtn.addEventListener('click', function(){
-               
-    tableList.style.borderColor = colorBox.value;
-
-});
-
-const tableBgcolor =changeBtn.querySelector(".table-bgcolor");
-const bgcolorBtn = changeBtn.querySelector(".bgcolor-btn");
-
-bgcolorBtn.addEventListener('click', function(){
-               
-               tableList.style.backgroundColor = tableBgcolor.value;
-           
-           });
-
-
-
-const bindData = function(){
-    const template = section.querySelector("template");
-
-    for(let i=0; i<notices.length; i++){
-        // var cloneNode = document.importNode(template.content, true);
-        const cloneNode = template.content.cloneNode(true);
-        const tds = cloneNode.querySelectorAll("td");
-        tds[0].textContent = notices[i].No;            
-        tds[1].textContent = notices[i].Title;
-        const aNode = tds[2].children[0];
-        aNode.href=notices[i].Link;
-        aNode.textContent = "바로가기";
-        tds[3].textContent = notices[i].Subject;
-        tds[4].textContent = notices[i].Level;
-
-        // tbodyNode.appendChild(cloneNode);
-        tbodyNode.append(cloneNode);
-     }
-
-     let trNode = tbodyNode.querySelectorAll("tr");
-     trNode[0].style.backgroundColor="blue"
-};
-
- bindData();
-
- let titleSorted = false;
-
-titldTd.onclick = function(){
     
-    tbodyNode.innerHTML = "";
 
-    
-    if(!titleSorted){
-        notices.sort(function(x,y){     
-            titleSorted = true;
-                if(x.title < y.title){
-                    return -1;
-                    } else if(x.title > y.title ){
-                        return 1;
-                    } else {
-                        return 0;
-                    }
 
-                });
-              
-       }else{
-           notices.reverse(); 
-       }
-         bindData();       
-    
-    };
+
 
     </script>
 </body>
