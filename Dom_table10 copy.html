@@ -19,6 +19,7 @@
             <tr>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td><a href=""></a></td>
                     <td></td>
                     <td></td>
@@ -28,6 +29,7 @@
         <table border="1" class="table-list">
             <thead>
                 <tr>
+                    <td class="check"><input type="checkbox" class="all-check" /></td>
                     <td class="no">No</td>
                     <td class="title">Title</td>
                     <td class="link">Link</td>
@@ -89,6 +91,13 @@
             <br/>
             <input type="text" class="tr-del" placeholder="삭제할 라인 숫자" /> 
             <input type="button" class="tr-del-btn" value="라인삭제하기" /> 
+            <br/>
+            <input type="button" class="up-btn" value="위로 올리기" /> 
+            <input type="button" class="down-btn" value="아래로 내리기" />
+            <br/>
+            <input type="button" class="check-del" value="체크 삭제하기" /> 
+            <input type="button" class="check-change" value="체크 바꾸기" />  
+
         </div> 
     <br/>
     </section>
@@ -130,7 +139,8 @@ const changeBtn =section.querySelector("#change-btn");
 const colorBox =changeBtn.querySelector(".color-box");
 const colorBtn =changeBtn.querySelector(".color-btn");
 
-// 보더 바꾸기
+// 보더 바꾸기  .style.borderColor = colorBox.value;
+
 colorBtn.addEventListener('click', function(){
                
     tableList.style.borderColor = colorBox.value;
@@ -140,7 +150,7 @@ colorBtn.addEventListener('click', function(){
 const tableBgcolor =changeBtn.querySelector(".table-bgcolor");
 const bgcolorBtn = changeBtn.querySelector(".bgcolor-btn");
 
-// 배경 색상 바꾸기
+// 배경 색상 바꾸기 .style.backgroundColor = tableBgcolor.value;
 bgcolorBtn.addEventListener('click', function(){
                
                tableList.style.backgroundColor = tableBgcolor.value;
@@ -148,7 +158,9 @@ bgcolorBtn.addEventListener('click', function(){
            });
 
           
-// 정렬하기
+// 정렬하기  template   const cloneNode = template.content.cloneNode(true);
+// `<a href="${notices[i].Link}">바로가기</a>`  tbodyNode.append(cloneNode);
+
 const bindData = function(){
     const template = section.querySelector("template");
  
@@ -157,17 +169,18 @@ const bindData = function(){
         // var cloneNode = document.importNode(template.content, true);
         const cloneNode = template.content.cloneNode(true);
         const tds = cloneNode.querySelectorAll("td");
-        tds[0].textContent = notices[i].No;            
-        tds[1].textContent = notices[i].Title;
+       tds[0].innerHTML=`<input type="checkbox" /> `
+        tds[1].textContent = notices[i].No;            
+        tds[2].textContent = notices[i].Title;
         
-        tds[2].innerHTML =`<a href="${notices[i].Link}">바로가기</a>`;
+        tds[3].innerHTML =`<a href="${notices[i].Link}">바로가기</a>`;
         // 아래처럼 풀어쓸 수도 있다.
         // const aNode = tds[2].children[0];
         // aNode.href=notices[i].Link;
         // aNode.textContent = "바로가기";
         
-        tds[3].textContent = notices[i].Subject;
-        tds[4].textContent = notices[i].Level; 
+        tds[4].textContent = notices[i].Subject;
+        tds[5].textContent = notices[i].Level; 
 
         // tbodyNode.appendChild(cloneNode);
         tbodyNode.append(cloneNode);
@@ -180,19 +193,7 @@ const bindData = function(){
 
 bindData();
 
-// 템플릿 감추기
-const templateBtn = changeBtn.querySelector(".template-btn");
-templateBtn.addEventListener('click', function(){
-    tbodyNode.style.visibility="hidden";
-}  );
-
-// 템플릿 보이기
-const templateShow = changeBtn.querySelector(".template-show");
-templateShow.addEventListener('click',  function(){
-    tbodyNode.style.visibility="visible";
-}  );
-
-
+//  정렬부분 체크 요망
  let titleSorted = false;
 
 titldTd.onclick = function(){
@@ -220,8 +221,74 @@ titldTd.onclick = function(){
     
     };
 
-// 테이블 라인 복제 추가하기 
+// 템플릿 감추기
+const templateBtn = changeBtn.querySelector(".template-btn");
+templateBtn.addEventListener('click', function(){
+    tbodyNode.style.visibility="hidden";
+}  );
 
+// 템플릿 보이기
+const templateShow = changeBtn.querySelector(".template-show");
+templateShow.addEventListener('click',  function(){
+    tbodyNode.style.visibility="visible";
+}  );
+
+
+
+// ex-9 다중 체크 선택 및 삭제(바꾸기바꾸기) 
+//   replaceWith checked  ("input[type='checkbox']:checked") cloneNode(true)
+
+  const allCheck = tableList.querySelector(".all-check");
+
+  const inChecks = tbodyNode.querySelectorAll("input[type='checkbox']");
+
+  const checkDel =changeBtn.querySelector(".check-del");
+  const checkChange =changeBtn.querySelector(".check-change"); 
+         
+         allCheck.addEventListener('change', function(){   
+             for(let g=0; g < inChecks.length; g++ )    
+            inChecks[g].checked = allCheck.checked;
+
+         });
+
+     checkDel.addEventListener('click', function(){
+         // 셀렉틱 체크 요망 - 중요 
+         // 체크 된 것만 선택함
+      const checkInput = tbodyNode.querySelectorAll("input[type='checkbox']:checked");
+        //   console.log(checkInput.length);
+          
+          for(let d=0; d<checkInput.length; d++)
+           checkInput[d].parentElement.parentElement.remove();
+           // 체크된 것이 인풋이므로 부모td의 부모tr를 삭제함.
+     });   
+
+     checkChange.addEventListener('click', function(){   
+        const checkInput = tbodyNode.querySelectorAll("input[type='checkbox']:checked");
+          
+        if(checkInput.length !=2  ){
+          alert("2개만 선택해주세요");
+          return;
+      }  
+        // const ck1 = checkInput[0].parentElement.parentElement;
+        // const ck2 = checkInput[1].parentElement.parentElement;
+        //  const clondCk1 = ck1.cloneNode(true);
+        //  ck2.replaceWith(clondCk1);
+        //  ck1.replaceWith(ck2);
+       // 위의 것을 조금 세련되게 하면
+      //  선택된 것들의 부모의 부모를 배열에 담아서 처리함 
+      
+       const checking = [ ];
+
+       for(let i=0; i<checkInput.length; i++ ){
+          checking.push(checkInput[i].parentElement.parentElement);
+       }
+
+         const clondCk1 = checking[0].cloneNode(true);
+         checking[1].replaceWith(clondCk1);
+         checking[0].replaceWith(checking[1]);
+     });    
+
+// 테이블 라인 복제 추가하기 cloneNode(true)
            
      
 const trAddBtn = changeBtn.querySelector(".tr-add-btn");
@@ -238,7 +305,7 @@ trAddBtn.addEventListener('click', function(){
 
 
 
-// 테이블 라인 삭제하기 
+// 테이블 라인 삭제하기 remove()
 
 const trDelBtn = changeBtn.querySelector(".tr-del-btn");
 const trDel = changeBtn.querySelector(".tr-del");
@@ -250,11 +317,49 @@ trDelBtn.addEventListener('click', function(){
            trDel.value = "";
            });           
 
-         
+ // ex-8 위로 올리기, 아래로 내리기  
+//   (nextTrNode == null)  nextTrNode.after(currentTrNode);     
 
-   // EX-6 노드 조작
 
-    const section6 = document.querySelector("#section6");
+ const upBtn = changeBtn.querySelector(".up-btn");
+const downBtn = changeBtn.querySelector(".down-btn");
+
+
+downBtn.addEventListener('click', function(){   
+
+    const currentTrNode = trNode[0];
+       
+    const nextTrNode = currentTrNode.nextElementSibling;
+
+    if(nextTrNode == null){
+        alert("더 이상 라인이 없습니다");
+        return;
+    }
+
+    nextTrNode.after(currentTrNode);
+    
+});
+
+upBtn.addEventListener('click', function(){   
+
+const currentTrNode = trNode[0];
+const prevTrNode = currentTrNode.previousElementSibling;
+
+if(prevTrNode == null){
+    alert("더 이상 라인이 없습니다");
+    return;
+}
+
+currentTrNode.after(prevTrNode);
+
+
+});
+
+
+   // EX-6 노드 조작 
+//    menuList.innerHTML += `<li><a href="">${titleInput.value}</a></li>`;
+
+         const section6 = document.querySelector("#section6");
         const node6 = section6.querySelector("#node6"); 
         const titleInput = node6.querySelector(".title-input");
         const addBtn = node6.querySelector(".add-button");
