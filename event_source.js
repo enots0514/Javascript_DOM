@@ -1,3 +1,86 @@
+// EX8-마우스 이벤트 객체 : 드래그 방식 
+window.addEventListener("load", function(){
+
+    const section8 = document.querySelector("#section8");
+    const container = section8.querySelector(".container");
+    const box = section8.querySelector(".box");
+    
+    let offset = {x:0, y:0};
+     // 3 박스 영역 옵셋 활용 위해 변수를 객체로 지정함.
+     // 옵셋이 x,y 두개 있으니까 객체를 활용함
+     // 객체가 아니라 따로 변수 2개를 지정해도 되지만, 객체가 더 효율적임.
+     
+    let dragging = false;
+    //1박스를 누를 때만 움직이기 위해 변수 추가
+    container.addEventListener("mousedown", function(e){
+       //2. 컨테이너 말고 박스를 누를 때만 움직이도록
+       // 컨테이너 빈 공간을 누를 때 갑자기 박스가 이동하는 것을 방지
+       if(e.target === box)
+       
+        // 1박스를 누를때만 움직이도록.
+       dragging = true;  
+
+     });
+       
+     container.addEventListener("mouseup", function(e){
+        // 1박스를 누를때만 움직이도록.
+        dragging = false;  
+     });
+
+    container.addEventListener("mousemove", function(e){
+       // 0박스가 움직이려면 포지션이 있어야 한다.
+       if(!dragging) return; 
+
+        box.style.left = e.x-offset.x + "px";
+        box.style.top = e.y-offset.y + "px";
+       
+    });
+   
+    container.addEventListener("mousedown", function(e){
+        //3. 박스를 누른 좌표에 맞게 움직이도록
+        // 항상 박스 상단을 포인터하는 것을 방지
+       
+        offset.x = e.offsetX;
+        offset.y = e.offsetY;
+        
+        // 박스 안 옵셋 값을 변수에 대입
+
+      });
+
+
+   });
+   
+
+
+// EX7-마우스 이벤트 포지션 
+window.addEventListener("load", function(){
+
+ const section7 = document.querySelector("#section7");
+ const container = section7.querySelector(".container");
+ const box = section7.querySelector(".box");
+
+ container.addEventListener("click", function(e){
+     console.log(`(x,y): ${e.x},${e.y} `); 
+     console.log(`client(x,y): ${e.clientX},${e.clientY} `); 
+     //e.x와 e.clientX는 같다.
+     console.log(`page(x,y): ${e.pageX},${e.pageY} `);
+     console.log(`offset(x,y): ${e.offsetX},${e.offsetY} `);
+     // offset 은 이벤트를 준 영역을 기준으로 함. 
+     // 박스에 주면 박스가 기준이고, 컨테이너에 주면 컨테이너가 기준이다.
+    box.style.position = "absolute";
+    // 박스가 움직이려면 포지션이 있어야 한다.
+    box.style.left = e.x + "px";
+    box.style.top = e.y + "px";
+    // 좌표값은 반드시 px를 붙여야 하다.
+ });
+
+
+});
+
+
+
+
+
 //EX6- Trigger
 // dispatchEvent(e)
 window.addEventListener("load", function(){
