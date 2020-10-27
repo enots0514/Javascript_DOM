@@ -1,3 +1,134 @@
+// EX10- 박스 좌표 활용하기
+window.addEventListener("load", function(){
+
+    const section10 = document.querySelector("#section10");
+    const container = section10.querySelector(".container");
+    let state = section10.querySelector(".state");
+   
+   let left = container.offsetLeft;
+   let top = container.offsetTop;
+   // 콘테이너가 웹브라이저 화면에서 떨어진 거리 구하기
+
+   console.log(left, top);
+
+
+    let current = null;
+    // 현재 선택한 박스를 변수 지정
+    
+    let offset = {x:0, y:0};
+     // 3 박스 영역 옵셋 활용 위해 변수를 객체로 지정함.
+     // 옵셋이 x,y 두개 있으니까 객체를 활용함
+     // 객체가 아니라 따로 변수 2개를 지정해도 되지만, 객체가 더 효율적임.
+     
+    let dragging = false;
+    //1박스를 누를 때만 움직이기 위해 변수 추가
+    container.addEventListener("mousedown", function(e){
+       //2. 컨테이너 말고 박스를 누를 때만 움직이도록
+       // 컨테이너 빈 공간을 누를 때 갑자기 박스가 이동하는 것을 방지
+      // 추가 - 현재 박스를 선택하고, 그 타겟 좌표까지 여기서 지정    
+       if(e.target.classList.contains("box")){
+
+        dragging = true;
+        current = e.target;
+        offset.x = e.offsetX;
+        offset.y = e.offsetY;
+       }
+       
+        // 1박스를 누를때만 움직이도록.
+         
+
+     });
+       
+     container.addEventListener("mouseup", function(e){
+        // 1박스를 누를때만 움직이도록.
+        dragging = false;  
+     });
+
+     container.addEventListener("mousemove", function(e){
+       // 0박스가 움직이려면 포지션이 있어야 한다.
+       if(!dragging) return; 
+
+       let x = e.pageX-offset.x-left;
+       let y = e.pageY-offset.y-top;
+         // 컨테이너 좌표에 맞추기 위해 left, top를 뺌
+
+       current.style.left = x + "px";
+       current.style.top =  y + "px";
+
+       state.innerText = `(x,y): (${x},${y})`;      
+       
+    });
+     
+    // container.addEventListener를 document.addEventListener
+   //  또는 section10.addEventListener로 해서 캡처링 가능함.
+     
+   });
+
+
+
+
+// EX9- 여러개 박스 : 드래그 방식 
+// 예제 8 변형 
+window.addEventListener("load", function(){
+
+    const section9 = document.querySelector("#section9");
+    const container = section9.querySelector(".container");
+    // let box = section9.querySelector(".box");
+   
+    let current = null;
+    // 현재 선택한 박스를 변수 지정
+    
+    let offset = {x:0, y:0};
+     // 3 박스 영역 옵셋 활용 위해 변수를 객체로 지정함.
+     // 옵셋이 x,y 두개 있으니까 객체를 활용함
+     // 객체가 아니라 따로 변수 2개를 지정해도 되지만, 객체가 더 효율적임.
+     
+    let dragging = false;
+    //1박스를 누를 때만 움직이기 위해 변수 추가
+    container.addEventListener("mousedown", function(e){
+       //2. 컨테이너 말고 박스를 누를 때만 움직이도록
+       // 컨테이너 빈 공간을 누를 때 갑자기 박스가 이동하는 것을 방지
+      // 추가 - 현재 박스를 선택하고, 그 타겟 좌표까지 여기서 지정    
+       if(e.target.classList.contains("box")){
+
+        dragging = true;
+        current = e.target;
+        offset.x = e.offsetX;
+        offset.y = e.offsetY;
+       }
+       
+        // 1박스를 누를때만 움직이도록.
+         
+
+     });
+       
+     container.addEventListener("mouseup", function(e){
+        // 1박스를 누를때만 움직이도록.
+        dragging = false;  
+     });
+
+    container.addEventListener("mousemove", function(e){
+       // 0박스가 움직이려면 포지션이 있어야 한다.
+       if(!dragging) return; 
+
+       current.style.left = e.pageX-offset.x + "px";
+       current.style.top = e.pageY-offset.y + "px";
+       
+    });
+   
+    container.addEventListener("mousedown", function(e){
+        //3. 박스를 누른 좌표에 맞게 움직이도록
+        // 항상 박스 상단을 포인터하는 것을 방지
+   
+        // 박스 안 옵셋 값을 변수에 대입
+    //    예제 8에서 했던 좌표값을 위로 올리고 이건 필요없음.
+      });
+
+
+   });
+
+
+
 // EX8-마우스 이벤트 객체 : 드래그 방식 
 window.addEventListener("load", function(){
 
@@ -19,7 +150,7 @@ window.addEventListener("load", function(){
        
         // 1박스를 누를때만 움직이도록.
        dragging = true;  
-
+       
      });
        
      container.addEventListener("mouseup", function(e){
@@ -31,8 +162,8 @@ window.addEventListener("load", function(){
        // 0박스가 움직이려면 포지션이 있어야 한다.
        if(!dragging) return; 
 
-        box.style.left = e.x-offset.x + "px";
-        box.style.top = e.y-offset.y + "px";
+        box.style.left = e.pageX-offset.x + "px";
+        box.style.top = e.pageY-offset.y + "px";
        
     });
    
@@ -60,8 +191,8 @@ window.addEventListener("load", function(){
  const box = section7.querySelector(".box");
 
  container.addEventListener("click", function(e){
-     console.log(`(x,y): ${e.x},${e.y} `); 
-     console.log(`client(x,y): ${e.clientX},${e.clientY} `); 
+   
+    // console.log(`client(x,y): ${e.clientX},${e.clientY} `); 
      //e.x와 e.clientX는 같다.
      console.log(`page(x,y): ${e.pageX},${e.pageY} `);
      console.log(`offset(x,y): ${e.offsetX},${e.offsetY} `);
@@ -69,8 +200,8 @@ window.addEventListener("load", function(){
      // 박스에 주면 박스가 기준이고, 컨테이너에 주면 컨테이너가 기준이다.
     box.style.position = "absolute";
     // 박스가 움직이려면 포지션이 있어야 한다.
-    box.style.left = e.x + "px";
-    box.style.top = e.y + "px";
+    box.style.left = e.clientX + "px";
+    box.style.top = e.clientY + "px";
     // 좌표값은 반드시 px를 붙여야 하다.
  });
 
